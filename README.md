@@ -1,5 +1,4 @@
-
-# Learn how to use *JSON Web Tokens* (JWT) for much *Authentication* win!
+# Learning *JSON Web Tokens* (JWT) - A *Simplistic* Session Management Approach for SPA/Hybrid Apps
 
 [![Build Status][travis-image]][travis-url]
 [![Code Climate](https://codeclimate.com/github/dwyl/learn-json-web-tokens/badges/gpa.svg)](https://codeclimate.com/github/dwyl/learn-json-web-tokens)
@@ -7,11 +6,9 @@
 [![Dependency Status](https://david-dm.org/dwyl/learn-json-web-tokens.svg)](https://david-dm.org/dwyl/learn-json-web-tokens)
 [![Node.js Version][node-version-image]][node-version-url]
 
-# Learning JWT - Starting with Simple Session Management Approach for SPA/Hybrid Apps
-
 The suggested pronunciation of JWT is the same as the English word
    "jot".
-   ( https://tools.ietf.org/html/rfc7519 )
+   [rfc7519]
 
 
 
@@ -25,6 +22,10 @@ cases this continues to be the best approach.
 Using session cookies to provide authenticated access to resources is a mature approach
 to typical login and access to protected services so why are so many developers turning
 to using tokens and JWT as an alternative - especially in the context of SPA/Hybrid Apps?
+
+Although there are many examples of quick implementations of REST services etc using JWT as an effective drop-in replacement for session cookies it is important to undertand the tradeoffs before committing to a core architectural commitment in your application. 
+
+It is fair to say that the use of JWT as an Application session approach is not going away and the continued use of cookies as the default approach is likely to diminish. In this environment it is important to understsand how JWTs are being (mi)used and learn how best to apply this technology as part of your own toolkit.
 
 ### History - Why Alternatives to Session Cookies 
 
@@ -75,7 +76,7 @@ scroll down to the "[***security***](https://github.com/dwyl/learn-json-web-toke
 
 ## Where JWT Excels in Real Life
 
-  - Single use Access Tokens
+### Single use Access Tokens
   Imagine that you have wish to invite thousands of users to signup to access your application with an offer 
   and you have some details for each of these users such as their email or phone etc.
   
@@ -86,9 +87,9 @@ scroll down to the "[***security***](https://github.com/dwyl/learn-json-web-toke
     when the url is accessed you can verify the content of the JWT by performing a signing check and then
     use the details to create the account confident that the contents of the token have not been modified.
     
-  - Simple multi micro service REST (stateless) API access
+### Simple multi micro service REST (stateless) API access
 
- - Transactional scoped access control.
+### Transactional scoped access control.
    If you want the client to be able to perform a sequence of actions that can be completed in a commit step
    or totally cancelled within a timeframe then using JWT as a session management approach could be useful.
 
@@ -507,3 +508,4 @@ and re-tweet to share it with others: https://twitter.com/olizilla/status/626487
 [coveralls-url]: https://coveralls.io/r/dwyl/learn-json-web-tokens?branch=master
 [dependencies-url]: https://david-dm.org/dwyl/learn-json-web-tokens
 [dependencies-image]: https://david-dm.org/dwyl/learn-json-web-tokens.svg
+[rfc7519]: https://tools.ietf.org/html/rfc7519
