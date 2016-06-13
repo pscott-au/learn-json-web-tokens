@@ -1,10 +1,5 @@
-![JWT logo wider](http://i.imgur.com/qDOOu4o.jpg)
 
 # Learn how to use *JSON Web Tokens* (JWT) for much *Authentication* win!
-
-![dilbert fixed the internet](http://i.imgur.com/cNElVof.jpg)
-
-Learn how to use JSON Web Token (JWT) to *secure* your Web and/or Mobile Application!
 
 [![Build Status][travis-image]][travis-url]
 [![Code Climate](https://codeclimate.com/github/dwyl/learn-json-web-tokens/badges/gpa.svg)](https://codeclimate.com/github/dwyl/learn-json-web-tokens)
@@ -12,7 +7,41 @@ Learn how to use JSON Web Token (JWT) to *secure* your Web and/or Mobile Applica
 [![Dependency Status](https://david-dm.org/dwyl/learn-json-web-tokens.svg)](https://david-dm.org/dwyl/learn-json-web-tokens)
 [![Node.js Version][node-version-image]][node-version-url]
 
+# Learning JWT - Starting with Simple Session Management Approach for SPA/Hybrid Apps
+
+The suggested pronunciation of JWT is the same as the English word
+   "jot".
+   ( https://tools.ietf.org/html/rfc7519 )
+
+
+
+
 ## *Why*?
+
+The traditional ( tried and trusted ) approach to controlling authenticated
+access to web app resources is to use session cookies and for many use
+cases this continues to be the best approach. 
+
+Using session cookies to provide authenticated access to resources is a mature approach
+to typical login and access to protected services so why are so many developers turning
+to using tokens and JWT as an alternative - especially in the context of SPA/Hybrid Apps?
+
+### History - Why Alternatives to Session Cookies 
+
+Some of the drivers that encouraged the evolution of an alternative approach include:
+  - the rising prominence of API services and desire for an open auth standard for API access
+  - the resistance to dependencies on browser implementation handling
+  - the security concerns of sending the session cookie with every http request as relates to MITM attacks.
+  - the increasing need to control access multiple micro-services from apps
+
+These issues helped drive the implementation of OpenID, OAUTH, OAUTH 1.0 and OAUTH 2.0. 
+These standards evolved and continue to experience controversy while back in the real world 
+the large API providers adopt their own variations of these technologies and approaches filter
+through to common use. 
+One of the common components of these approaches is the use of tokens that encapsulate
+information in various contexts through the auth communications 
+( Auth, Bearer and Refresh tokens for example play different roles in coordinating the user access control ).
+
 
 Do you want any (*all*) of these:
 
@@ -22,7 +51,7 @@ Do you want any (*all*) of these:
 note: don't worry, you can still *use* cookies in your app if you *really* want to!
 *we've got you covered*: [dwyl/hapi-auth-jwt2#***store-your-jwt-in-a-cookie***](https://github.com/dwyl/hapi-auth-jwt2#want-to-sendstore-your-jwt-in-a-cookie)
 + [x] ***Stateless*** authentication (simplifies [***horizontal scaling***](http://en.wikipedia.org/wiki/Scalability#Horizontal_and_vertical_scaling))
-+ [x] ***Prevent*** (mitigate) Cross-Site Request Forgery (**CSRF**) attacks.
++ [x] ***Minimise*** (some advantage) Cross-Site Request Forgery (**CSRF**) attacks.
 
 ## What?
 
@@ -42,6 +71,72 @@ example: `https://www.yoursite.com/private-content/?token=eyJ0eXAiOiJKV1Qi.eyJrZ
 
 **Note**: if this does not *look* "secure" to you,
 scroll down to the "[***security***](https://github.com/dwyl/learn-json-web-tokens#q-if-i-put-the-jwt-in-the-url-or-header-is-it-secure)" section.
+
+
+## Where JWT Excels in Real Life
+
+  - Single use Access Tokens
+  Imagine that you have wish to invite thousands of users to signup to access your application with an offer 
+  and you have some details for each of these users such as their email or phone etc.
+  
+  One approach would be to create accounts for all of these users and associate an invite id and then
+  send a url or link that includes details of this.
+  or .. using JWT
+    You could sign a jwt that includes their profile details ( email, phone ) and include this in a url.
+    when the url is accessed you can verify the content of the JWT by performing a signing check and then
+    use the details to create the account confident that the contents of the token have not been modified.
+    
+  - Simple multi micro service REST (stateless) API access
+
+ - Transactional scoped access control.
+   If you want the client to be able to perform a sequence of actions that can be completed in a commit step
+   or totally cancelled within a timeframe then using JWT as a session management approach could be useful.
+
+
+
+## Lazy Approach to OAUTH Type Access Control
+
+With more developers consuming OAUTH API services there is growing familiarity with the JWT bearer tokens that
+are provided through these services and when they come to developing their own REST APIS it
+is understandable that they would want to align with these standards. 
+Often the solution ends up using a single session token provided when a user logs in and
+this looks fine. As things evolve though it can be very easy to end up with a convoluted solution
+that is not fit for purpose because it suffers from the worst aspects of both session cookies
+and an incomplete OAUTH. 
+
+The Common JWT Approach to DIY Auth and Access Control including Session Management
+
+### In Practice What Advantages Can We Expect to be Possible by starting to use JWT for access control
+  - more control over access control token storage and no reliance on native browser implementation - On Android, this means SharedPreferences, on iOS, this means Keychain.
+  - slightly less MITM attack vulnerability than session cookies because every request to the auth domain does not necessarily include the session cookie
+  - greater flexibility in using the same token across domains when compared to cookies which are bound to a specific domain.
+  - provides a path to a more robust OAUTH type aproach ( more short lived tokens to enhance security etc )
+  - If the private signing key is shared across services you are able to confirm the identity of the user without
+    the need to communicate with the authentication provider.
+  - possible to validate the claim without performing a lookup of user session details
+  - able to incorporate signed data as part of you access credential
+    eg this could allow you to use the same credentials ( JWT ) to prove the identity of the user
+    and also to describe authorization of use across different services. 
+  - 
+  
+
+### In Practice What Kind of Issues Should I be Aware of
+  - JWT tokens are not encrypted although they are signed. This means that anybody who has a copy of the token
+    can examine any data stored within it. If there are sensitive details this can pose security risks.
+  - may end up using session cookies and lose some of the advantages originally motivating the choice to use over session cookies
+  - if you allow the token to be used as proof of identity to refresh tokens then you increase the security risks
+    impact of an intercepted token.
+  - as soon as you introduce a persistant storage state to the session you either lose the benefits of stateless
+  sessions or introduce a layer of complexity ( flexibility ) to your architecture that requires a more sophisticated
+  architectural understanding.
+  - if using multiple services then this loose coupling can limit the control you have over session expiry etc.
+  - JWT use can allow you to architect complex solutions but keep in mind that it is not an authentication/session
+  solution but just a component - don't use this hammer for every auth problem nail.
+  - if you start asking how to invalidate the token you are probably using them incorrectly. 
+  You can either create an abstract layer beneath the token auth to handle this state. If you start trying to use 
+  changing the signing key as a session termination approach you are probably doing the wrong thing.
+
+
 
 ### What does a JWT *Look* Like?
 
