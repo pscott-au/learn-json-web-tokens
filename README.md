@@ -11,7 +11,7 @@ The suggested pronunciation of JWT is the same as the English word
    [rfc7519]
 
 
-
+# NB: This is a fork investigating ways to address concerns about the unsuitability of JWT as a general purpose session token. In most cases you should use a more complete OAUTH situation for this situation.
 
 ## *Why*?
 
